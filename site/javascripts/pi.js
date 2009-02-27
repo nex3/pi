@@ -38,7 +38,7 @@
         // Fetch the data, then pre-cache the next data.
         fetchNext(function() {fetchNext(nextDigit)});
 
-        next = $(".next");
+        next = $("#next");
         timer = $.timer(750, function() {
             if (next.hasClass("on"))
                 next.removeClass("on");
@@ -49,14 +49,27 @@
         var digit = e.which - zero;
         if (digit < 0 || digit > 9) return true;
 
-        if (digit != current_digit) return true;
+        if (digit != current_digit) {
+            var wrong = $("#wrong");
+            if (wrong.length != 0)
+                wrong.text(digit);
+            else
+                next.before("<span class='digit' id='wrong'>" + digit + "</span> ");
+            return false;
+        }
+
         next.addClass("on");
         timer.reset(750);
         nextDigit();
 
-        $("span.digit.next").before("<span class='digit'>" + digit + "</span> ");
+        var wrong = $("#wrong");
+        if (wrong.length != 0) {
+            wrong.removeAttr("id");
+            wrong.text(digit);
+        } else
+            next.before("<span class='digit'>" + digit + "</span> ");
         if (first) {
-            $("span.digit.next").before(" <span class='digit point'>.</span> ");
+            next.before(" <span class='digit point'>.</span> ");
             first = false;
         }
     });
