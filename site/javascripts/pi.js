@@ -32,15 +32,26 @@
 
 
     var first = true;
+    var timer, next;
 
     $(document).ready(function() {
         // Fetch the data, then pre-cache the next data.
         fetchNext(function() {fetchNext(nextDigit)});
+
+        next = $(".next");
+        timer = $.timer(750, function() {
+            if (next.hasClass("on"))
+                next.removeClass("on");
+            else
+                next.addClass("on");
+        });
     }).keypress(function(e) {
         var digit = e.which - zero;
         if (digit < 0 || digit > 9) return true;
 
         if (digit != current_digit) return true;
+        next.addClass("on");
+        timer.reset(750);
         nextDigit();
 
         $("span.digit.next").before("<span class='digit'>" + digit + "</span> ");
