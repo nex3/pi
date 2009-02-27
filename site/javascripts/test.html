@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <script type="text/javascript" src="mathcontext.js"></script>
+        <script type="text/javascript" src="bigdecimal.js"></script>
+        <script language="javascript">
+            function test() {
+                
+                var scale = document.settings.scale.value;
+                var e = new BigDecimal("0");
+                var denominator = new BigDecimal("1");
+                var eBefore = new BigDecimal("-1");
+                var iteration = 1;
+                
+                while (!e.equals(eBefore)) {
+                    eBefore = e;
+                    e = e.add(BigDecimal.prototype.ONE.divide(denominator, scale, BigDecimal.prototype.ROUND_HALF_UP));
+                    denominator = denominator.multiply(new BigDecimal(iteration+''));
+                    ++iteration;
+                }
+                var result = document.getElementById("result");
+                if (result.hasChildNodes()) {
+                    result.removeChild(result.childNodes.item(0));
+                }
+                result.appendChild(document.createTextNode(e.toString()));
+            }
+        </script>
+    </head>
+    <body>
+        <form name="settings">
+            Decimal places: <input type="text" name="scale" value="10"></input><br/>
+            <input type="button" value="Calculate e" onClick="test()"></input>
+            <h3>Result:</h3>
+            <p id="result">
+            </p>
+        </form>
+    </body>
+</html>
+
